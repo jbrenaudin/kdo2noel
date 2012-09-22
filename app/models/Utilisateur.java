@@ -2,6 +2,7 @@ package models;
 
 import java.util.LinkedList;
 import java.util.List;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,15 +12,16 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderColumn;
-import javax.persistence.Transient;
+
 import play.data.validation.Email;
-import play.data.validation.Equals;
 import play.data.validation.Required;
 import play.data.validation.Unique;
 import play.db.jpa.Model;
 
 @Entity(name = "utilisateur")
 public class Utilisateur extends Model {
+
+	private static final long serialVersionUID = 1L;
 
 	public static boolean existe(String email, String motDePasse) {
 		return Utilisateur.count("byEmailAndMotDePasse", email, motDePasse) == 1;
@@ -28,21 +30,21 @@ public class Utilisateur extends Model {
 	public static Utilisateur recupereParSurnom(String surnom) {
 		return Utilisateur.find("bySurnom", surnom).first();
 	}
- 
+
 	public static Utilisateur recupereParEmail(String email) {
 		return Utilisateur.find("byEmail", email).first();
 	}
 
 	public List<Utilisateur> chercheAmisPossibles(String surnom) {
-		return Utilisateur.find("FROM utilisateur u "
-				+ "WHERE LOWER(u.surnom) LIKE LOWER(:surnom) "
-				+ "AND u != :utilisateurConnecte "
-				+ "AND u NOT IN (SELECT i.emetteur FROM invitation i WHERE i.destinataire = :utilisateurConnecte) "
-				+ "AND u NOT IN (SELECT i.destinataire FROM invitation i WHERE i.emetteur = :utilisateurConnecte) "
-				+ "AND u NOT IN (SELECT ami FROM utilisateur u2 INNER JOIN u2.amis ami WHERE u2 = :utilisateurConnecte) ")
-		.bind("surnom", "%" + surnom + "%")
-		.bind("utilisateurConnecte", this)
-		.fetch(10);
+		return Utilisateur
+				.find("FROM utilisateur u "
+						+ "WHERE LOWER(u.surnom) LIKE LOWER(:surnom) "
+						+ "AND u != :utilisateurConnecte "
+						+ "AND u NOT IN (SELECT i.emetteur FROM invitation i WHERE i.destinataire = :utilisateurConnecte) "
+						+ "AND u NOT IN (SELECT i.destinataire FROM invitation i WHERE i.emetteur = :utilisateurConnecte) "
+						+ "AND u NOT IN (SELECT ami FROM utilisateur u2 INNER JOIN u2.amis ami WHERE u2 = :utilisateurConnecte) ")
+				.bind("surnom", "%" + surnom + "%")
+				.bind("utilisateurConnecte", this).fetch(10);
 	}
 
 	public Cadeau ajouteCadeau(String libelle) {
@@ -65,7 +67,7 @@ public class Utilisateur extends Model {
 		}
 		return null;
 	}
-	
+
 	public void changePositionCadeau(Cadeau cadeau, int position) {
 		if (cadeaux.remove(cadeau)) {
 			cadeaux.add(position - 1, cadeau);
@@ -76,7 +78,7 @@ public class Utilisateur extends Model {
 		amis.add(ami);
 		return this;
 	}
-	
+
 	public Utilisateur supprimeAmi(Utilisateur ami) {
 		amis.remove(ami);
 		return this;
@@ -96,11 +98,11 @@ public class Utilisateur extends Model {
 			amis.add(position - 1, ami);
 		}
 	}
-	
+
 	public List<Invitation> getInvitationsEnvoyees() {
 		return Invitation.envoyeesPar(this);
 	}
-	
+
 	public List<Invitation> getInvitationsRecues() {
 		return Invitation.recuesPar(this);
 	}
@@ -110,13 +112,13 @@ public class Utilisateur extends Model {
 	}
 
 	public List<Utilisateur> getAmisOublies() {
-		List amisOublies = new LinkedList(amis);
+		List<Utilisateur> amisOublies = new LinkedList<Utilisateur>(amis);
 		for (Achat achat : achats) {
 			amisOublies.remove(achat.ami);
 		}
 		return amisOublies;
 	}
-	
+
 	public List<Achat> getMesAchats() {
 		return achats;
 	}
@@ -124,7 +126,7 @@ public class Utilisateur extends Model {
 	public void acheteCadeau(Utilisateur ami, Cadeau cadeau) {
 		achats.add(new Achat(ami, cadeau));
 	}
-	
+
 	public float getMontantTotalDesAchats() {
 		float montantTotal = 0;
 		for (Achat achat : achats) {
@@ -132,11 +134,11 @@ public class Utilisateur extends Model {
 		}
 		return montantTotal;
 	}
-	
+
 	public Utilisateur() {
 		this(null, null, null);
 	}
-	
+
 	public Utilisateur(String surnom, String email, String motDePasse) {
 		this.surnom = surnom;
 		this.email = email;
@@ -147,12 +149,12 @@ public class Utilisateur extends Model {
 	}
 
 	@Required
-	@Unique(message="Ce surnom est déjà utilisé")
+	@Unique(message = "Ce surnom est déjà utilisé")
 	@Column(unique = true, nullable = false, name = "surnom")
 	public String surnom;
 
 	@Required
-	@Unique(message="Cet email est déjà utilisé")
+	@Unique(message = "Cet email est déjà utilisé")
 	@Email
 	@Column(unique = true, nullable = false, name = "email")
 	public String email;
@@ -170,7 +172,7 @@ public class Utilisateur extends Model {
 	@JoinTable(name = "ami", inverseJoinColumns = @JoinColumn(name = "ami_id", referencedColumnName = "id"))
 	@OrderColumn(name = "position")
 	public List<Utilisateur> amis;
-	
+
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
 	@JoinColumn(name = "utilisateur_id", referencedColumnName = "id", nullable = false)
 	@OrderColumn(name = "position")

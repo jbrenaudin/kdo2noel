@@ -2,7 +2,6 @@ package controllers;
 
 import models.Cadeau;
 import models.Utilisateur;
-import play.mvc.Controller;
 import play.mvc.With;
 
 @With(Securite.class)

@@ -1,13 +1,11 @@
 package controllers;
 
-import java.lang.reflect.InvocationTargetException;
-import java.util.List;
 import models.Utilisateur;
-import play.Play;
-import play.mvc.*;
-import play.data.validation.*;
-import play.libs.*;
-import play.utils.*;
+import play.data.validation.Required;
+import play.libs.Crypto;
+import play.mvc.Before;
+import play.mvc.Controller;
+import play.mvc.Http;
 
 public class Securite extends Controller {
 
