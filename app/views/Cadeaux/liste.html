@@ -1,0 +1,50 @@
+#{extends 'connected.html' /}
+
+#{set 'moreScripts'}
+	#{get 'moreScripts' /}
+	$(function() {
+		activeMenu("Cadeaux");
+	});
+#{/set}
+
+<div class="span3">
+	<div class="row-fluid">
+    	<div class="well sidebar-nav">
+	    	<ul class="nav nav-list">
+		  		<li class="${!amiSelectionne ? 'active' : ''}">#{a @Cadeaux.maListe()}<i class="icon-home ${!amiSelectionne ? 'icon-white' : 'icon-black'}"></i> Ma liste#{/a}</li>
+			</ul>
+      	</div>
+	</div>
+	<div class="row-fluid">
+		<div class="well sidebar-nav">
+	    	<ul id="amis" class="nav nav-list">
+	    		<li class="nav-header">Liste de mes amis</li>
+		  		#{list utilisateur.amis, as:'ami'}
+		    		<li class="${amiSelectionne == ami ? 'active' : ''}">
+		    			#{a @Cadeaux.listeDUnAmi(ami.id)}
+							<div>
+			    				<i class="icon-user ${amiSelectionne == ami ? 'icon-white' : 'icon-black'}"></i>
+								${ami.surnom}
+							</div>
+							<div>
+								#{if !ami.cadeaux.isEmpty()}		    				
+									<span class="label label-blue">${ami.cadeaux.size()}</span>
+								#{/if}
+							</div>
+		    			#{/a}
+		    		</li>
+		  		#{/list}
+		  		#{else}
+					<li><p><i class="icon-info-sign"></i>Pour gérer vos amis, rendez-vous dans le menu #{a @Amis.mesAmis()}Mes amis#{/a}</p></li>
+				#{/else}
+			</ul>
+      	</div>
+	</div>
+</div>
+
+<div class="span9">
+	<div class="well">
+		<h1>#{get 'titre' /}</h1>
+		#{doLayout /}
+	</div>	
+</div>

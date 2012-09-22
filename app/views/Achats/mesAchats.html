@@ -1,0 +1,61 @@
+#{extends 'connected.html' /}
+
+#{set 'titre'}
+	Mes achats
+#{/set}
+
+#{set 'moreScripts'}
+	#{get 'moreScripts' /}
+	$(function() {
+		activeMenu("Achats");
+	});
+#{/set}
+
+<div class="span3">
+	<div class="row-fluid">
+		<div class="well sidebar-nav">
+	    	<ul id="amis" class="nav nav-list">
+	    		<li class="nav-header">Mes amis oubliées</li>
+		  		#{list utilisateur.amisOublies, as:'ami'}
+		    		<li>
+		    			<a>
+			    			<div>
+				    			<i class="icon-user"></i> ${ami.surnom}
+				    		</div>
+		    			</a>
+		    		</li>
+		    	#{/list}	    		
+	    	</ul>
+	    </div>
+	</div>
+</div>
+
+<div class="span9">
+	<div class="well">
+		<h1>Mes achats</h1>
+		<table id="amis" class="table table-striped">
+			<thead>
+		    	<tr>
+		      		<th style="text-align:left;">Surnom</th>
+		      		<th style="text-align:left;">Cadeau</th>
+		      		<th style="text-align:right;">Montant</th>
+		    	</tr>
+		  	</thead>
+		  	<tbody>
+	  		#{list utilisateur.mesAchats, as:'achat'}
+		    	<tr>
+		      		<td>${achat.ami.surnom}</td>
+		      		<td>${achat.cadeau.libelle}</td>
+		      		<td style="text-align:right;">${achat.montant ? achat.montant.enEuros() : ""}</td>
+		    	</tr>
+	  		#{/list}
+		  	</tbody>
+			<tfoot>
+		     	<tr>
+		     		<td colspan="2" style="text-align:right;font-weight:bold;">Total</td>
+		     		<td style="text-align:right;font-weight:bold;">${utilisateur.montantTotalDesAchats.enEuros()}</td>
+		     	</tr>
+			</tfoot>
+		</table>
+	</div>	
+</div>

@@ -1,0 +1,182 @@
+#{extends 'connected.html' /}
+
+#{set 'titre'}
+	Mes amis
+#{/set}
+
+#{set 'moreScripts'}
+	#{get 'moreScripts' /}
+	var urlListeDAmisPossible = #{jsAction @Amis.possible(':surnom') /}
+	var urlRefuseUneInvitationRecue = #{jsAction @Invitations.refuseUneInvitationRecue(':idEmetteur') /}
+	var urlAccepteUneInvitationRecue = #{jsAction @Invitations.accepteUneInvitationRecue(':idEmetteur') /}
+	var urlSupprimeAmi = #{jsAction @Amis.supprime(':id') /}
+	var urlChangePosition = #{jsAction @Amis.changePosition() /}
+
+	$(function() {
+		activeMenu("Amis");
+		$("#rechercheAmi").autocomplete({
+			source: function( request, response ) {
+				$.get(urlListeDAmisPossible({surnom:request.term}), 
+				function( data ) {
+					response( $.map( data, function( item ) {
+						return { label: item.surnom, id: item.id }
+					}));
+				}, "json");
+			},
+			select: function( event, ui ) {
+				envoiInvitation(ui.item.id);
+			}
+		});
+		$( "#amis" ).sortable({
+			axis: 'y',
+			opacity: 0.6,
+			stop: function(event, ui) {
+				$.ajax({
+					type: 'PUT',
+					url: urlChangePosition(),
+					dataType: "json",
+					data: {	id:ui.item[0].id, 
+							position:$(ui.item).parent().children().index(ui.item) + 1},
+					error: function( data ) {
+						$( "#amis" ).sortable("cancel");
+					}
+				});
+			}
+		});
+		$( "#amis" ).disableSelection();
+	});
+	function envoiInvitation(idDestinataire) {
+		$("input[name=idDestinataire]").val(idDestinataire);
+		$("#envoiInvitation").submit();
+	}
+	function annuleInvitation(idDestinataire) {
+		$("form[id=annuleInvitation]/input[name=idDestinataire]").val(idDestinataire);
+
+		
+		$("#annuleInvitation").submit();
+	}
+	function refuseInvitation(idEmetteur) {
+		$.ajax({
+			type: 'DELETE',
+			url: urlRefuseUneInvitationRecue({idEmetteur: idEmetteur}),
+			dataType: "json",
+			success: function(data) {
+				supprimeInvitationRecue(idEmetteur);
+			}
+		});
+	}
+	function supprimeAmi(idAmi) {
+		$.ajax({
+			type: 'DELETE',
+			url: urlSupprimeAmi({id: idAmi}),
+			dataType: "json",
+			success: function(data) {
+				$("#amis li:#" + idAmi).remove();
+			}
+		});
+	}
+	function accepteInvitation(idEmetteur) {
+		$.post(urlRefuseUneInvitationRecue({idEmetteur: idEmetteur}),
+	   		function(ami) {
+	   			afficheNouvelAmi(ami);
+				supprimeInvitationRecue(idEmetteur);
+		});
+	}
+	function afficheNouvelAmi(ami) {
+		$( "#amis" ).append(
+			"<li id='" + ami.id + "'>" + 
+			"	<div>" + 
+			"		<div class='petit'>" + escapeHtml(ami.surnom) + "</div>" + 
+			"		<div>" + 
+			"			<a href='javascript:supprimeAmi(" + ami.id + ")' class='btn btn-micro' title='Supprimer'>" + 
+			"				<i class='icon-remove'></i>" + 
+			"			</a>" + 
+			"		</div>" + 
+			"	</div>" + 
+			"</li>"); 
+	}
+	function supprimeInvitationRecue(idEmetteur) {
+		$("#invitationsRecues li:#" + idEmetteur).remove();
+		mettreAJourLeNombreDInvitationsRecues($("#invitationsRecues li").size() - 1);
+	}
+#{/set}
+
+<div class="span4">
+	<div class="row-fluid">
+		<div class="well sidebar-nav">
+			<ul class="nav nav-list">
+				<li class="nav-header">Inviter des amis</li>
+				<li><input type="text" id="rechercheAmi" placeholder="Recherche…" /></li>
+			</ul>
+		</div>
+	</div>
+
+	<div class="row-fluid">
+		<div class="well sidebar-nav">
+			<ul id="invitationsRecues" class="liste-navigation">
+				<li class="nav-header">Ils veulent être ami avec vous</li>
+				#{list utilisateur.invitationsRecues, as:'invitation'}
+					<li id="${invitation.emetteur.id}">
+						<div>
+							<div class="avec2actions">
+								<i class="icon-user"></i>${invitation.emetteur.surnom}
+							</div>
+							<div>
+								<a href="javascript:accepteInvitation(${invitation.emetteur.id})" class="btn btn-micro btn-primary" title="Accepter"><i class="icon-ok icon-white"></i></a>
+								<a href="javascript:refuseInvitation(${invitation.emetteur.id})" class="btn btn-micro" title="Refuser"><i class="icon-remove"></i></a>
+							</div>
+						</div>
+					</li>
+				#{/list}
+			</ul>
+		</div>
+		
+		<div class="row-fluid">
+			<div class="well sidebar-nav">
+				<ul id="invitationsEnvoyees" class="liste-navigation">
+					<li class="nav-header">Vous voulez être ami avec eux</li>
+					#{list utilisateur.invitationsEnvoyees, as:'invitation'}
+						<li id="${invitation.destinataire.id}">
+							<div>
+								<div class="avec1action">
+									<i class="icon-user"></i>${invitation.destinataire.surnom}
+								</div>
+								<div>
+									#{form @Invitations.annuleUneInvitationEnvoyee(invitation.destinataire.id)}
+										<a href="#" onClick="parentElement.submit();" class="btn btn-micro" title="Annuler"><i class="icon-remove"></i></a>
+									#{/form}
+								</div>
+							</div>
+						</li>
+					#{/list}
+				</ul>
+			</div>
+		</div>
+			
+	</div>
+</div>	
+
+<div class="span8">
+	<div class="well">
+		<h1>Mes amis</h1>
+		<ol id="amis" class="liste ordonnable">
+          	#{list utilisateur.amis, as:'ami'}
+	    		<li id="${ami.id}">
+	    			<div>
+		    			<div class="petit">${ami.surnom}</div>
+	    				<div>
+							<a href="javascript:supprimeAmi(${ami.id})" class="btn btn-micro" title="Supprimer">
+								<i class="icon-remove"></i>
+							</a>
+						</div>
+					</div>
+	    		</li>
+	  		#{/list}
+	  	</ol>
+	</div>	
+</div>
+
+#{form @Invitations.envoiAUnUtilisateur(), id:'envoiInvitation'}
+	<input type="hidden" name="idDestinataire" value="" />
+#{/form}
+

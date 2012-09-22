@@ -1,20 +1,25 @@
-# Routes
-# This file defines all application routes (Higher priority routes first)
-# ~~~~
-
-GET		/										Securite.connexion
 GET		/connexion								Securite.connexion
 POST    /connexion          					Securite.authentifie
 GET     /deconnexion         					Securite.deconnexion
+GET     /achats                     			Achats.mesAchats
+GET		/amis									Amis.mesAmis
+PUT		/amis									Amis.changePosition
+GET     /amis/possible/{surnom}                 Amis.possible
+DELETE  /amis/{id}                      		Amis.supprime
+POST  	/amis/{idAmi}/cadeau                    Amis.acheteCadeau
+GET     /amis/{id}/cadeaux                      Cadeaux.listeDUnAmi
+GET     /cadeaux                     			Cadeaux.maListe
+POST	/cadeaux								Cadeaux.ajoute
+PUT		/cadeaux								Cadeaux.changePosition
+DELETE	/cadeaux/{id}							Cadeaux.supprime
+POST    /invitations           					Invitations.envoiAUnUtilisateur
+DELETE  /invitations/envoyee/{idDestinataire}   Invitations.annuleUneInvitationEnvoyee
+DELETE  /invitations/recue/{idEmetteur}     	Invitations.refuseUneInvitationRecue
+POST  	/invitations/recue/{idEmetteur}     	Invitations.accepteUneInvitationRecue
 POST    /utilisateurs          					Utilisateurs.cree
 GET		/utilisateurs/nouveau					Utilisateurs.nouveau
 GET		/captcha/{id}							Utilisateurs.captcha
+GET		/										Cadeaux.maListe
 
-# Ignore favicon requests
-GET        /favicon.ico                            404
-
-# Map static resources from the /app/public folder to the /public path
-GET        /public/                                staticDir:public
-
-# Catch all
-*           /{controller}/{action}                 {controller}.{action}
+GET     /favicon.ico                            404
+GET     /public/                                staticDir:public

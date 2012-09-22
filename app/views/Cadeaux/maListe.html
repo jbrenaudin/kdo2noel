@@ -1,0 +1,93 @@
+#{extends 'Cadeaux/liste.html' /}
+
+#{set 'titre'}
+	Ma liste
+#{/set}
+
+#{set 'moreScripts'}
+	var urlChangePosition = #{jsAction @Cadeaux.changePosition() /}
+	var urlAjouterCadeau = #{jsAction @Cadeaux.ajoute() /}
+	var urlSupprimerCadeau = #{jsAction @Cadeaux.supprime(':id') /}
+	
+	$(function() {
+		$( "#cadeaux" ).sortable({
+			axis: 'y',
+			opacity: 0.6,
+			stop: function(event, ui) {
+				$.ajax({
+					type: 'PUT',
+					url: urlChangePosition(),
+					dataType: "json",
+					data: {	id:ui.item[0].id, position:$(ui.item).parent().children().index(ui.item) + 1},
+					error: function( data ) {
+						$( "#cadeaux" ).sortable("cancel");
+					}
+				});
+			}
+		});
+		$( "#cadeaux" ).disableSelection();
+		$( "#formulaireDAjoutDeCadeau" ).submit(function(event) {
+			$.post(	urlAjouterCadeau(), $( this ).serialize(),
+					function(cadeau) {
+						afficheNouveauCadeau(cadeau);
+						$( "#libelle" ).val( "" );
+					}, "json");
+			return false;
+		});
+	});
+	function afficheNouveauCadeau(cadeau) {
+		$( "#cadeaux" ).append(
+				"<li id='" + cadeau.id + "'>" +
+				"	<div>" +
+				"		<div class='grand'>" + escapeHtml(cadeau.libelle) + "</div>" + 
+				"		<div>" + 
+				"			<a href='#' onClick='javascript:confirmeSuppressionCadeau(this)' class='btn btn-micro' title='J&#39;en veux plus'>" +
+				"				<i class='icon-remove'></i>" +
+				"			</a>" +
+				"		</div>" +
+				"	</div>" +
+				"</li>"	);
+	}
+	
+	function confirmeSuppressionCadeau(cadeau) {
+		ouvrePopupDeConfirmation(
+			"Souhaitez-vous supprimer ce cadeau ?", 
+			cadeau.parentElement.parentElement.firstChild.nextSibling.textContent,
+			"javascript:supprimeCadeau(" + cadeau.parentElement.parentElement.parentElement.id + ");");
+	}
+	function supprimeCadeau(id) {
+		$.ajax({
+			type: 'DELETE',
+			url: urlSupprimerCadeau({id: id}),
+			dataType: "json",
+			success: function(cadeau) {
+				$("#cadeaux li:#" + id).remove();
+				fermePopupDeConfirmation();
+			}
+		});
+	}
+#{/set}
+
+<ol id="cadeaux" class="liste ordonnable" />
+	#{list utilisateur.cadeaux, as:'cadeau'}
+		<li id="${cadeau.id}">
+			<div>
+				<div class="grand">
+					${cadeau.libelle}
+				</div>
+				<div>
+					<a href="#" onClick="javascript:confirmeSuppressionCadeau(this);" class="btn btn-micro" title="J&#39;en veux plus">
+						<i class="icon-remove"></i>
+					</a>
+				</div>
+			</div>
+		</li>
+	#{/list}
+</ol>
+
+<br />
+
+<form id="formulaireDAjoutDeCadeau" class="form-inline">
+	<input type="text" id="libelle" name="libelle" />
+	<button type="submit" id="ajouter" class="btn btn-primary">&{'action.ajouter'}</button>
+</form>

@@ -1,0 +1,22 @@
+#{extends 'Cadeaux/liste.html' /}
+
+#{set 'titre'}
+	Liste de ${amiSelectionne.surnom}
+#{/set}
+
+#{if amiSelectionne.cadeaux}
+	<ol class="liste">
+		#{list amiSelectionne.cadeaux, as:'cadeau'}
+			<li>
+				<div>
+					<div class="grand">
+						${cadeau.libelle}
+					</div>
+				</div>
+			</li>
+		#{/list}
+	</ol>
+#{/if}
+#{else}
+	Aucun cadeau.	
+#{/else}
