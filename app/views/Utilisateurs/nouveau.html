@@ -1,0 +1,73 @@
+#{extends 'main.html' /}
+
+<div class="row-fluid">
+	<div class="span12">
+		<div class="row-fluid">
+			<h1>&{'utilisateur.compte.creation'}</h1><br />
+
+			#{form @Utilisateurs.cree()}
+			
+				#{if flash.error}
+					<p class="error">&{flash.error}</p>
+				#{/if}
+						
+				#{field 'utilisateur.surnom'}
+					<div class="control-group ${field.error ? 'error' : ''}">
+		            	<label for="${field.name}" class="control-label obligatoire">&{field.name}</label>
+		            	<div class="controls">
+		              		<input type="text" name="${field.name}" id="${field.name}" value="${flash[field.name]}" autofocus="autofocus" />
+		              		<span class="help-inline">${field.error}</span>
+		            	</div>
+		          	</div>
+				#{/}
+				
+				#{field 'utilisateur.email'}
+					<div class="control-group ${field.error ? 'error' : ''}">
+		            	<label for="${field.name}" class="control-label obligatoire">&{field.name}</label>
+		            	<div class="controls">
+		              		<input type="text" name="${field.name}" id="${field.name}" value="${flash[field.name]}" />
+		              		<span class="help-inline">${field.error}</span>
+		            	</div>
+		          	</div>
+				#{/}
+	
+				#{field 'utilisateur.motDePasse'}
+					<div class="control-group ${field.error ? 'error' : ''}">
+		            	<label for="${field.name}" class="control-label obligatoire">&{field.name}</label>
+		            	<div class="controls">
+		              		<input type="password" name="${field.name}" id="${field.name}" value="${flash[field.name]}" />
+		              		<span class="help-inline">${field.error}</span>
+		            	</div>
+		          	</div>
+				#{/}
+	
+				#{field 'motDePasseConfirmation'}
+					<div class="control-group ${field.error ? 'error' : ''}">
+		            	<label for="${field.name}" class="control-label obligatoire">&{field.name}</label>
+		            	<div class="controls">
+		              		<input type="password" name="${field.name}" id="${field.name}" value="${flash[field.name]}" />
+		              		<span class="help-inline">${field.error}</span>
+		            	</div>
+		          	</div>
+				#{/}
+				
+				#{field 'code'}
+					<div class="control-group ${field.error ? 'error' : ''}">
+						<label for="${field.name}" class="control-label obligatoire">Code à saisir</label>
+						<img src="@{Utilisateurs.captcha(randomID)}" />
+						<input type="hidden" name="randomID" value="${randomID}" />
+						<div class="controls">
+							<input type="text" name="${field.name}" id="${field.name}" size="18" />
+							<span class="help-inline">${field.error}</span>
+						</div>
+					</div>
+				#{/}
+	
+				<p>
+					<button type="submit" id="boutonCreerCompte" class="btn btn-primary">&{'action.creer'}</button>
+					<button type="button" id="boutonAnnulerCreationCompte" class="btn" onclick="javascript:window.location='@{Securite.connexion()}';">&{'action.annuler'}</button>
+				</p>
+			#{/form}
+		</div>
+	</div>
+</div>

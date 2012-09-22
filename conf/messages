@@ -1,3 +1,23 @@
-# You can specialize this file for each language.
-# For example, for French create a messages.fr file
-#
+application.titre=Kado2Noel
+application.bonjour=Bonjour
+connexion.seSouvenir=Se souvenir
+
+utilisateur.connexion=Connexion
+utilisateur.compte.creer=Créer un compte
+utilisateur.compte.creation=Création d'un compte
+utilisateur.surnom=Surnom
+utilisateur.email=Email
+utilisateur.motDePasse=Mot de passe
+motDePasseConfirmation=Confirmation du mot de passe
+
+action.creer=Créer
+action.ajouter=Ajouter
+action.annuler=Annuler
+action.supprimer=J'en veux plus
+action.seConnecter=Se connecter
+action.seDeconnecter=Se déconnecter
+
+validation.unique=Cet %s est déjà utilisé
+validation.required=Ce champ est obligatoire
+validation.email=Cet %s est invalide
+validation.equals=Doit être égale au %2$s

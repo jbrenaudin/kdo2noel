@@ -2,13 +2,13 @@
 # This file defines all application routes (Higher priority routes first)
 # ~~~~
 
-# Home page
-GET     /                                          Instructions.index
-
-# People
-GET        /people                                 People.index
-POST       /people                                 People.create
-DELETE     /people/{id}                            People.delete
+GET		/										Securite.connexion
+GET		/connexion								Securite.connexion
+POST    /connexion          					Securite.authentifie
+GET     /deconnexion         					Securite.deconnexion
+POST    /utilisateurs          					Utilisateurs.cree
+GET		/utilisateurs/nouveau					Utilisateurs.nouveau
+GET		/captcha/{id}							Utilisateurs.captcha
 
 # Ignore favicon requests
 GET        /favicon.ico                            404

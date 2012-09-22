@@ -1,0 +1,46 @@
+#{extends 'main.html' /}
+
+<div class="row-fluid">
+	<div class="span6">
+		<div class="row-fluid">
+			<h1>&{'utilisateur.connexion'}</h1><br />
+
+			#{form @Securite.authentifie(), id:'formulaireAuthentification'}
+				
+				#{if flash.error}
+					<p class="error">&{flash.error}</p>
+				#{/if}
+	
+				<p>
+					<label for="email">&{'utilisateur.email'}</label>
+					<input type="text" id="email" name="email" autofocus="autofocus" class="span7" />
+				</p>
+	
+				<p>
+					<label for="motDePasse">&{'utilisateur.motDePasse'}</label>
+					<input type="password" id="motDePasse" name="motDePasse" class="span7" />
+				</p>
+	
+				<p>
+					<button type="submit" id="boutonConnexion" class="btn btn-primary">&{'action.seConnecter'}</button>
+					<span class="help-inline">
+				    	<input type="checkbox" id="seSouvenir" name="seSouvenir" value="true" ${flash.seSouvenir ? 'checked="true"' : ''} /> &{'connexion.seSouvenir'}
+					</span>
+				</p>
+			#{/form}
+		</div>
+	</div>
+	
+	<div class="span6">
+		<div class="row-fluid">
+			<div class="hero-unit">
+  				<p>Si vous n'avez pas de compte, 
+  					<a href="@{Utilisateurs.nouveau()}">
+      					inscrivez-vous
+    				</a>
+  				</p>
+			</div>
+		</div>
+	</div>
+
+</div>
