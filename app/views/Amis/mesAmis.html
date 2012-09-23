@@ -71,10 +71,11 @@
 			url: urlSupprimeAmi({id: idAmi}),
 			dataType: "json",
 			success: function(data) {
-				$("#amis li:#" + idAmi).remove();
+				location.reload();
 			}
 		});
 	}
+	
 	function accepteInvitation(idEmetteur) {
 		$.post(urlRefuseUneInvitationRecue({idEmetteur: idEmetteur}),
 	   		function(ami) {
