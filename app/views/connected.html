@@ -4,7 +4,14 @@
 	<ul class="nav">
   		<li id="menuCadeaux"><a href="@{Cadeaux.maListe()}">Mes listes</a></li>
   		<li id="menuAchats"><a href="@{Achats.mesAchats()}">Mes achats</a></li>
-  		<li id="menuAmis"><a href="@{Amis.mesAmis()}">Mes amis&nbsp;<span id="nombreDInvitationsRecues" class="label label-warning"></span></a></li>
+  		<li id="menuAmis">
+  			<a href="@{Amis.mesAmis()}">
+  				Mes amis&nbsp;
+  				#{if utilisateur.nombreDInvitationsRecues > 0 }
+  					<span id="nombreDInvitationsRecues" class="label label-warning">&{utilisateur.nombreDInvitationsRecues}</span>
+  				#{/if}
+  			</a>
+  		</li>
 	</ul>
 #{/set}
 
@@ -26,14 +33,6 @@
 	function activeMenu(idMenu) {
 		$("#menu" + idMenu).addClass("active");
 	}
-	function mettreAJourLeNombreDInvitationsRecues(nbInvitation) {
-		$("#nombreDInvitationsRecues").text(nbInvitation + "");
-		if (nbInvitation == 0) $("#nombreDInvitationsRecues").hide();
-		else $("#nombreDInvitationsRecues").show();
-	}
-	$(function() {
-		mettreAJourLeNombreDInvitationsRecues(&{utilisateur.nombreDInvitationsRecues});
-	});
 #{/set}				
 
 #{ifErrors}	
