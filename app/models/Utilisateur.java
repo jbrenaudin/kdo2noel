@@ -24,7 +24,7 @@ public class Utilisateur extends Model {
 	private static final long serialVersionUID = 1L;
 
 	public static boolean existe(String email, String motDePasse) {
-		return Utilisateur.count("byEmailAndMotDePasse", email, motDePasse) == 1;
+		return Utilisateur.count("byEmailAndMotDePasse", email.toLowerCase(), motDePasse) == 1;
 	}
 
 	public static Utilisateur recupereParSurnom(String surnom) {
@@ -32,7 +32,7 @@ public class Utilisateur extends Model {
 	}
 
 	public static Utilisateur recupereParEmail(String email) {
-		return Utilisateur.find("byEmail", email).first();
+		return Utilisateur.find("byEmail", email.toLowerCase()).first();
 	}
 
 	public List<Utilisateur> chercheAmisPossibles(String surnom) {
@@ -135,10 +135,16 @@ public class Utilisateur extends Model {
 		return montantTotal;
 	}
 
+	public void setEmail(String email) {
+		if (email != null) {
+			this.email = email.toLowerCase();
+		}
+	}
+
 	public Utilisateur() {
 		this(null, null, null);
 	}
-
+	
 	public Utilisateur(String surnom, String email, String motDePasse) {
 		this.surnom = surnom;
 		this.email = email;
