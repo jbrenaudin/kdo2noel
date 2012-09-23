@@ -26,7 +26,6 @@ public class Invitations extends Connecte {
 		if (invitation != null) {
 			invitation.delete();
 		}
-		Amis.mesAmis();
 	}
 
 	public static void refuseUneInvitationRecue(Long idEmetteur) {
@@ -37,7 +36,6 @@ public class Invitations extends Connecte {
 		if (invitation != null) {
 			invitation.delete();
 		}
-		Amis.mesAmis();
 	}
 
 	public static void accepteUneInvitationRecue(Long idEmetteur) {
@@ -50,6 +48,5 @@ public class Invitations extends Connecte {
 			invitation.save();
 			invitation.delete();
 		}
-		Amis.mesAmis();
 	}
 }

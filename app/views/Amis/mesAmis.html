@@ -6,12 +6,8 @@
 
 #{set 'moreScripts'}
 	#{get 'moreScripts' /}
+	
 	var urlListeDAmisPossible = #{jsAction @Amis.possible(':surnom') /}
-	var urlRefuseUneInvitationRecue = #{jsAction @Invitations.refuseUneInvitationRecue(':idEmetteur') /}
-	var urlAccepteUneInvitationRecue = #{jsAction @Invitations.accepteUneInvitationRecue(':idEmetteur') /}
-	var urlSupprimeAmi = #{jsAction @Amis.supprime(':id') /}
-	var urlChangePosition = #{jsAction @Amis.changePosition() /}
-
 	$(function() {
 		activeMenu("Amis");
 		$("#rechercheAmi").autocomplete({
@@ -23,48 +19,66 @@
 					}));
 				}, "json");
 			},
-			select: function( event, ui ) {
+			select: function(event, ui) {
 				envoiInvitation(ui.item.id);
 			}
 		});
-		$( "#amis" ).sortable({
+		$("#amis").sortable({
 			axis: 'y',
 			opacity: 0.6,
 			stop: function(event, ui) {
-				$.ajax({
-					type: 'PUT',
-					url: urlChangePosition(),
-					dataType: "json",
-					data: {	id:ui.item[0].id, 
-							position:$(ui.item).parent().children().index(ui.item) + 1},
-					error: function( data ) {
-						$( "#amis" ).sortable("cancel");
-					}
-				});
+				changePosition(ui.item[0].id, $(ui.item).parent().children().index(ui.item) + 1);
 			}
 		});
-		$( "#amis" ).disableSelection();
+		$("#amis").disableSelection();
 	});
+	
+	var urlChangePosition = #{jsAction @Amis.changePosition() /}
+	function changePosition(id, position) {
+		$.ajax({
+			type: 'PUT',
+			url: urlChangePosition(),
+			dataType: "json",
+			data: {	id: id, position: position},
+			error: function( data ) {
+				$("#amis").sortable("cancel");
+			}
+		});
+	}
+	
+	var urlEnvoiUneInvitation = #{jsAction @Invitations.envoiAUnUtilisateur(':idDestinataire') /}
 	function envoiInvitation(idDestinataire) {
-		$("input[name=idDestinataire]").val(idDestinataire);
-		$("#envoiInvitation").submit();
+		$.post(urlEnvoiUneInvitation({idDestinataire: idDestinataire}),
+	   		function() {
+	   			location.reload();
+		});
 	}
+	
+	var urlAnnuleUneInvitationEnvoyee = #{jsAction @Invitations.annuleUneInvitationEnvoyee(':idDestinataire') /}
 	function annuleInvitation(idDestinataire) {
-		$("form[id=annuleInvitation]/input[name=idDestinataire]").val(idDestinataire);
-
-		
-		$("#annuleInvitation").submit();
+		$.ajax({
+			type: 'DELETE',
+			url: urlAnnuleUneInvitationEnvoyee({idDestinataire: idDestinataire}),
+			dataType: "json",
+			success: function(data) {
+				location.reload();
+			}
+		});
 	}
+
+	var urlRefuseUneInvitationRecue = #{jsAction @Invitations.refuseUneInvitationRecue(':idEmetteur') /}
 	function refuseInvitation(idEmetteur) {
 		$.ajax({
 			type: 'DELETE',
 			url: urlRefuseUneInvitationRecue({idEmetteur: idEmetteur}),
 			dataType: "json",
 			success: function(data) {
-				supprimeInvitationRecue(idEmetteur);
+				location.reload();
 			}
 		});
 	}
+	
+	var urlSupprimeAmi = #{jsAction @Amis.supprime(':id') /}
 	function supprimeAmi(idAmi) {
 		$.ajax({
 			type: 'DELETE',
@@ -76,29 +90,12 @@
 		});
 	}
 	
+	var urlAccepteUneInvitationRecue = #{jsAction @Invitations.accepteUneInvitationRecue(':idEmetteur') /}
 	function accepteInvitation(idEmetteur) {
 		$.post(urlRefuseUneInvitationRecue({idEmetteur: idEmetteur}),
-	   		function(ami) {
-	   			afficheNouvelAmi(ami);
-				supprimeInvitationRecue(idEmetteur);
+	   		function() {
+	   			location.reload();
 		});
-	}
-	function afficheNouvelAmi(ami) {
-		$( "#amis" ).append(
-			"<li id='" + ami.id + "'>" + 
-			"	<div>" + 
-			"		<div class='petit'>" + escapeHtml(ami.surnom) + "</div>" + 
-			"		<div>" + 
-			"			<a href='javascript:supprimeAmi(" + ami.id + ")' class='btn btn-micro' title='Supprimer'>" + 
-			"				<i class='icon-remove'></i>" + 
-			"			</a>" + 
-			"		</div>" + 
-			"	</div>" + 
-			"</li>"); 
-	}
-	function supprimeInvitationRecue(idEmetteur) {
-		$("#invitationsRecues li:#" + idEmetteur).remove();
-		mettreAJourLeNombreDInvitationsRecues($("#invitationsRecues li").size() - 1);
 	}
 #{/set}
 
@@ -123,8 +120,12 @@
 								<i class="icon-user"></i>${invitation.emetteur.surnom}
 							</div>
 							<div>
-								<a href="javascript:accepteInvitation(${invitation.emetteur.id})" class="btn btn-micro btn-primary" title="Accepter"><i class="icon-ok icon-white"></i></a>
-								<a href="javascript:refuseInvitation(${invitation.emetteur.id})" class="btn btn-micro" title="Refuser"><i class="icon-remove"></i></a>
+								<a href="javascript:accepteInvitation(${invitation.emetteur.id})" class="btn btn-micro btn-primary" title="Accepter">
+									<i class="icon-ok icon-white"></i>
+								</a>
+								<a href="javascript:refuseInvitation(${invitation.emetteur.id})" class="btn btn-micro" title="Refuser">
+									<i class="icon-remove"></i>
+								</a>
 							</div>
 						</div>
 					</li>
@@ -143,9 +144,9 @@
 									<i class="icon-user"></i>${invitation.destinataire.surnom}
 								</div>
 								<div>
-									#{form @Invitations.annuleUneInvitationEnvoyee(invitation.destinataire.id)}
-										<a href="#" onClick="parentElement.submit();" class="btn btn-micro" title="Annuler"><i class="icon-remove"></i></a>
-									#{/form}
+									<a href="javascript:annuleInvitation(${invitation.destinataire.id})" class="btn btn-micro" title="Annuler">
+										<i class="icon-remove"></i>
+									</a>
 								</div>
 							</div>
 						</li>
