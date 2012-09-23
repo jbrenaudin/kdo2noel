@@ -5,7 +5,6 @@
 #{/set}
 
 #{set 'moreScripts'}
-	var urlChangePosition = #{jsAction @Cadeaux.changePosition() /}
 	var urlAjouterCadeau = #{jsAction @Cadeaux.ajoute() /}
 	var urlSupprimerCadeau = #{jsAction @Cadeaux.supprime(':id') /}
 	
@@ -14,15 +13,7 @@
 			axis: 'y',
 			opacity: 0.6,
 			stop: function(event, ui) {
-				$.ajax({
-					type: 'PUT',
-					url: urlChangePosition(),
-					dataType: "json",
-					data: {	id:ui.item[0].id, position:$(ui.item).parent().children().index(ui.item) + 1},
-					error: function( data ) {
-						$( "#cadeaux" ).sortable("cancel");
-					}
-				});
+				changePosition(ui.item[0].id, $(ui.item).parent().children().index(ui.item) + 1);
 			}
 		});
 		$( "#cadeaux" ).disableSelection();
@@ -30,11 +21,25 @@
 			$.post(	urlAjouterCadeau(), $( this ).serialize(),
 					function(cadeau) {
 						afficheNouveauCadeau(cadeau);
-						$( "#libelle" ).val( "" );
+						$("#libelle").val( "" );
 					}, "json");
 			return false;
 		});
 	});
+	
+	var urlChangePosition = #{jsAction @Cadeaux.changePosition() /}
+	function changePosition(id, position) {
+		$.ajax({
+			type: 'PUT',
+			url: urlChangePosition(),
+			dataType: "json",
+			data: {	id: id, position: position},
+			error: function( data ) {
+				$( "#cadeaux" ).sortable("cancel");
+			}
+		});
+	}
+	
 	function afficheNouveauCadeau(cadeau) {
 		$( "#cadeaux" ).append(
 				"<li id='" + cadeau.id + "'>" +
