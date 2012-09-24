@@ -22,7 +22,7 @@
 		  		#{list utilisateur.amis, as:'ami'}
 		    		<li class="${amiSelectionne == ami ? 'active' : ''}">
 		    			#{a @Cadeaux.listeDUnAmi(ami.id)}
-							<div>
+							<div title="${ami.email}">
 			    				<i class="icon-user ${amiSelectionne == ami ? 'icon-white' : 'icon-black'}"></i>
 								${ami.surnom}
 							</div>

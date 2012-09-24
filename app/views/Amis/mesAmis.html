@@ -116,7 +116,7 @@
 				#{list utilisateur.invitationsRecues, as:'invitation'}
 					<li id="${invitation.emetteur.id}">
 						<div>
-							<div class="avec2actions">
+							<div class="avec2actions" title="${invitation.emetteur.email}">
 								<i class="icon-user"></i>${invitation.emetteur.surnom}
 							</div>
 							<div>
@@ -140,7 +140,7 @@
 					#{list utilisateur.invitationsEnvoyees, as:'invitation'}
 						<li id="${invitation.destinataire.id}">
 							<div>
-								<div class="avec1action">
+								<div class="avec1action" title="${invitation.emetteur.email}">
 									<i class="icon-user"></i>${invitation.destinataire.surnom}
 								</div>
 								<div>
@@ -165,7 +165,7 @@
           	#{list utilisateur.amis, as:'ami'}
 	    		<li id="${ami.id}">
 	    			<div>
-		    			<div class="petit">${ami.surnom}</div>
+		    			<div class="petit" title="${ami.email}">${ami.surnom}</div>
 	    				<div>
 							<a href="javascript:supprimeAmi(${ami.id})" class="btn btn-micro" title="Supprimer">
 								<i class="icon-remove"></i>
