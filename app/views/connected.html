@@ -6,9 +6,9 @@
   		<li id="menuAchats"><a href="@{Achats.mesAchats()}">Mes achats</a></li>
   		<li id="menuAmis">
   			<a href="@{Amis.mesAmis()}">
-  				Mes amis&nbsp;
+  				Mes amis
   				#{if utilisateur.nombreDInvitationsRecues > 0 }
-  					<span id="nombreDInvitationsRecues" class="label label-warning">&{utilisateur.nombreDInvitationsRecues}</span>
+  					&nbsp;<span id="nombreDInvitationsRecues" class="label label-warning">&{utilisateur.nombreDInvitationsRecues}</span>
   				#{/if}
   			</a>
   		</li>
