@@ -12,6 +12,7 @@ function ouvrePopupDeConfirmation(titre, message, siOK) {
 	$('#messagePopupDeConfirmation').text(message);
 	$('#okPopupDeConfirmation').attr('href', siOK);
 	$('#popupDeConfirmation').modal('show');
+	$('#okPopupDeConfirmation').focus();
 }
 
 function fermePopupDeConfirmation() {
