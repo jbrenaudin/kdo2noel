@@ -11,19 +11,24 @@
 			axis: 'y',
 			opacity: 0.6,
 			stop: function(event, ui) {
-				$.ajax({
-					type: 'PUT',
-					url: urlChangePosition(),
-					dataType: "json",
-					data: {	id:ui.item[0].id, position:$(ui.item).parent().children().index(ui.item) + 1},
-					error: function( data ) {
-						$( "#cadeaux" ).sortable("cancel");
-					}
-				});
+				changePosition(ui.item[0].id, $(ui.item).parent().children().index(ui.item) + 1);
 			}
 		});
 		$( "#cadeaux" ).disableSelection();
 	});
+	
+	var urlChangePosition = #{jsAction @Cadeaux.changePosition() /}
+	function changePosition(id, position) {
+		$.ajax({
+			type: 'PUT',
+			url: urlChangePosition(),
+			dataType: "json",
+			data: {	id: id, position: position},
+			error: function( data ) {
+				$("#cadeaux").sortable("cancel");
+			}
+		});
+	}
 	
 	var urlSupprimerCadeau = #{jsAction @Cadeaux.supprime(':id') /}
 	function supprimeCadeau(id) {
@@ -65,6 +70,6 @@
 <br />
 
 #{form @Cadeaux.ajoute(), id:"formulaireDAjoutDeCadeau", class:"form-inline"}
-	<input type="text" id="libelle" name="libelle" />
+	<input type="text" id="libelle" name="libelle" autofocus="autofocus" />
 	<button type="submit" id="ajouter" class="btn btn-primary">&{'action.ajouter'}</button>
 #{/form}
