@@ -175,6 +175,11 @@
 	    		</li>
 	  		#{/list}
 	  	</ol>
+  		#{if !utilisateur.amis}
+  			<div class="alert alert-info">
+				<i class="icon-info-sign"></i>&nbsp;Pour <strong>inviter un ami</strong>, renseignez <strong>son surnom</strong> dans le champ de recherche.
+			</div>
+		#{/if}
 	</div>	
 </div>
 

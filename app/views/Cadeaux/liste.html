@@ -34,10 +34,14 @@
 		    			#{/a}
 		    		</li>
 		  		#{/list}
-		  		#{else}
-					<li><p><i class="icon-info-sign"></i>Pour gérer vos amis, rendez-vous dans le menu #{a @Amis.mesAmis()}Mes amis#{/a}</p></li>
-				#{/else}
 			</ul>
+	  		#{if !utilisateur.amis}
+	  			<div class="alert-ami">
+		  			<div class="alert alert-info">
+						<i class="icon-info-sign"></i>&nbsp;Pour <strong>gérer vos amis</strong>, rendez-vous dans le menu <strong>#{a @Amis.mesAmis()}Mes amis#{/a}</strong>
+					</div>
+				</div>
+			#{/if}
       	</div>
 	</div>
 </div>

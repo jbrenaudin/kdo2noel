@@ -67,6 +67,12 @@
 	#{/list}
 </ol>
 
+#{if !utilisateur.cadeaux}
+	<div class="alert alert-info">
+		<i class="icon-info-sign"></i>&nbsp;Pour <strong>ajouter un cadeau</strong> que vous aimeriez recevoir, utiliser le champ ci-dessous.
+	</div>
+#{/if}
+
 <br />
 
 #{form @Cadeaux.ajoute(), id:"formulaireDAjoutDeCadeau", class:"form-inline"}

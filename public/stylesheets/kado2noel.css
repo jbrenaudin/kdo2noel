@@ -42,3 +42,6 @@ h1{margin-bottom:15px;}
 .nav-list>li>a>div:first-child{height:18px;width:164px;overflow:hidden;}
 .nav-list>li>a>div:last-child{vertical-align:top;}
 
+.alert-ami{padding:3px 15px}
+.alert-ami div {padding: 8px 35px 8px 8px;margin: 0px}
+
