@@ -6,8 +6,6 @@
 
 #{set 'moreScripts'}
 	var urlChangePosition = #{jsAction @Cadeaux.changePosition() /}
-	var urlSupprimerCadeau = #{jsAction @Cadeaux.supprime(':id') /}
-	
 	$(function() {
 		$( "#cadeaux" ).sortable({
 			axis: 'y',
@@ -27,22 +25,23 @@
 		$( "#cadeaux" ).disableSelection();
 	});
 	
-	function confirmeSuppressionCadeau(cadeau) {
-		ouvrePopupDeConfirmation(
-			"Souhaitez-vous supprimer ce cadeau ?", 
-			cadeau.parentElement.parentElement.firstChild.nextSibling.textContent,
-			"javascript:supprimeCadeau(" + cadeau.parentElement.parentElement.parentElement.id + ");");
-	}
+	var urlSupprimerCadeau = #{jsAction @Cadeaux.supprime(':id') /}
 	function supprimeCadeau(id) {
 		$.ajax({
 			type: 'DELETE',
 			url: urlSupprimerCadeau({id: id}),
 			dataType: "json",
 			success: function(cadeau) {
-				$("#cadeaux li:#" + id).remove();
-				fermePopupDeConfirmation();
+				location.reload();
 			}
 		});
+	}
+	
+	function confirmeSuppressionCadeau(cadeau) {
+		ouvrePopupDeConfirmation(
+			"Souhaitez-vous supprimer ce cadeau ?", 
+			cadeau.parentElement.parentElement.firstChild.nextSibling.textContent,
+			"javascript:supprimeCadeau(" + cadeau.parentElement.parentElement.parentElement.id + ");");
 	}
 #{/set}
 
