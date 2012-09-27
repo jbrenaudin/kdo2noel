@@ -6,7 +6,6 @@
 
 #{set 'moreScripts'}
 	var urlChangePosition = #{jsAction @Cadeaux.changePosition() /}
-	var urlAjouterCadeau = #{jsAction @Cadeaux.ajoute() /}
 	var urlSupprimerCadeau = #{jsAction @Cadeaux.supprime(':id') /}
 	
 	$(function() {
@@ -26,28 +25,7 @@
 			}
 		});
 		$( "#cadeaux" ).disableSelection();
-		$( "#formulaireDAjoutDeCadeau" ).submit(function(event) {
-			$.post(	urlAjouterCadeau(), $( this ).serialize(),
-					function(cadeau) {
-						afficheNouveauCadeau(cadeau);
-						$( "#libelle" ).val( "" );
-					}, "json");
-			return false;
-		});
 	});
-	function afficheNouveauCadeau(cadeau) {
-		$( "#cadeaux" ).append(
-				"<li id='" + cadeau.id + "'>" +
-				"	<div>" +
-				"		<div class='grand'>" + escapeHtml(cadeau.libelle) + "</div>" + 
-				"		<div>" + 
-				"			<a href='#' onClick='javascript:confirmeSuppressionCadeau(this)' class='btn btn-micro' title='J&#39;en veux plus'>" +
-				"				<i class='icon-remove'></i>" +
-				"			</a>" +
-				"		</div>" +
-				"	</div>" +
-				"</li>"	);
-	}
 	
 	function confirmeSuppressionCadeau(cadeau) {
 		ouvrePopupDeConfirmation(
@@ -87,7 +65,7 @@
 
 <br />
 
-<form id="formulaireDAjoutDeCadeau" class="form-inline">
+#{form @Cadeaux.ajoute(), id:"formulaireDAjoutDeCadeau", class:"form-inline"}
 	<input type="text" id="libelle" name="libelle" />
 	<button type="submit" id="ajouter" class="btn btn-primary">&{'action.ajouter'}</button>
-</form>
+#{/form}

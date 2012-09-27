@@ -13,10 +13,9 @@ public class Cadeaux extends Connecte {
 
 	public static void ajoute(String libelle) {
 		Utilisateur utilisateur = Connecte.utilisateur();
-		Cadeau cadeau = utilisateur.ajouteCadeau(libelle);
-		Arrete.siContientDesErreurs(validation);
+		utilisateur.ajouteCadeau(libelle);
 		utilisateur.save();
-		renderJSON(cadeau);
+		maListe();
 	}
 
 	public static void supprime(long id) {

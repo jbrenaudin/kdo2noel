@@ -47,10 +47,12 @@ public class Utilisateur extends Model {
 				.bind("utilisateurConnecte", this).fetch(10);
 	}
 
-	public Cadeau ajouteCadeau(String libelle) {
-		Cadeau cadeau = new Cadeau(libelle);
-		cadeaux.add(cadeau);
-		return cadeau;
+	public void ajouteCadeau(String libelle) {
+		libelle = libelle.trim();
+		if (!libelle.isEmpty()) {
+			Cadeau cadeau = new Cadeau(libelle);
+			cadeaux.add(cadeau);
+		}
 	}
 
 	public Cadeau supprimeCadeau(long id) {
