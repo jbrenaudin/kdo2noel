@@ -2,6 +2,7 @@ body{padding-top:65px;padding-bottom:40px;}
 footer{text-align:center;}
 h1{margin-bottom:15px;}
 
+.brand a{text-decoration:none;color:white;}
 .label-blue{background-color:#08c;}
 .error{color: #b94a48;}
 .obligatoire:after{content:" *";}

@@ -26,7 +26,7 @@
 		<div class="navbar navbar-fixed-top">
       		<div class="navbar-inner">
         		<div class="container-fluid">
-					<span class="brand">&{'application.titre'}</span>
+					<span class="brand">#{a @Cadeaux.maListe()}&{'application.titre'}#{/a}</span>
           			<div class="nav-collapse">
 						#{get 'menus' /}
 	           			#{get 'options' /}

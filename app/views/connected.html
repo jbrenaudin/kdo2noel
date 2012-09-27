@@ -2,15 +2,15 @@
 
 #{set 'menus'}
 	<ul class="nav">
-  		<li id="menuCadeaux"><a href="@{Cadeaux.maListe()}">Mes listes</a></li>
-  		<li id="menuAchats"><a href="@{Achats.mesAchats()}">Mes achats</a></li>
+  		<li id="menuCadeaux">#{a @Cadeaux.maListe()}Mes listes#{/a}</li>
+  		<li id="menuAchats">#{a @Achats.mesAchats()}Mes achats#{/a}</li>
   		<li id="menuAmis">
-  			<a href="@{Amis.mesAmis()}">
+  			#{a @Amis.mesAmis()}
   				Mes amis
-  				#{if utilisateur.nombreDInvitationsRecues > 0 }
+  				#{if utilisateur.nombreDInvitationsRecues > 0}
   					&nbsp;<span id="nombreDInvitationsRecues" class="label label-warning">&{utilisateur.nombreDInvitationsRecues}</span>
   				#{/if}
-  			</a>
+  			#{/a}
   		</li>
 	</ul>
 #{/set}
