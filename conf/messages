@@ -12,6 +12,7 @@ motDePasseConfirmation=Confirmation du mot de passe
 
 action.creer=Créer
 action.ajouter=Ajouter
+action.modifier=Modifier
 action.annuler=Annuler
 action.supprimer=J'en veux plus
 action.seConnecter=Se connecter

@@ -35,4 +35,23 @@ public class Achats extends Connecte {
 		moi.save();
 		mesAchats();
 	}
+	
+	public static void affiche(long id) {
+		Utilisateur moi = Connecte.utilisateur();
+		Achat achat = moi.recupereAchat(id);
+		render(achat);
+	}
+	
+	public static void modifie(long id, @Valid Achat achat) {
+		if (validation.hasErrors()) {
+			params.flash();
+			render("@affiche", achat);
+		}
+		Utilisateur moi = Connecte.utilisateur();
+		Achat ancien = moi.recupereAchat(id);
+		ancien.cadeau = achat.cadeau;
+		ancien.pour = achat.pour;
+		ancien.save();
+		mesAchats();
+	}
 }

@@ -1,0 +1,54 @@
+#{extends 'connected.html' /}
+
+#{set 'titre'}
+	Mes achats
+#{/set}
+
+#{set 'moreScripts'}
+	#{get 'moreScripts' /}
+	$(function() {
+		activeMenu("Achats");
+		
+		$('#boutonAnnuler').click(function() {
+			window.location = '@{Achats.mesAchats()}';
+		});
+	});
+#{/set}
+
+<div class="span12">
+	<div class="well">
+		<h1>Modification d'un achat</h1>
+		#{form @Achats.modifie(achat.id)}
+			<input type="hidden" name="achat.id" value="${achat?.id}">
+			
+			<div class="control-group ${errors.forKey('achat.pour') ? 'error' : ''}">
+		    	<label for="achat.pour" class="control-label obligatoire">&{'achat.pour'}</label>
+		    	<div class="controls">
+		      		<input type="text" name="achat.pour" id="achat.pour" value="${achat?.pour}" autofocus="autofocus" />
+		      		<span class="help-inline">${errors.forKey('achat.pour')}</span>
+		    	</div>
+		  	</div>
+			
+			<div class="control-group ${errors.forKey('achat.cadeau') ? 'error' : ''}">
+		    	<label for="achat.cadeau" class="control-label obligatoire">&{'achat.cadeau'}</label>
+		    	<div class="controls">
+		      		<input type="text" name="achat.cadeau" id="achat.cadeau" value="${achat?.cadeau}" />
+		      		<span class="help-inline">${errors.forKey('achat.cadeau')}</span>
+		    	</div>
+		  	</div>
+			
+			<div class="control-group ${errors.forKey('achat.montant') ? 'error' : ''}">
+		    	<label for="achat.montant" class="control-label">&{'achat.montant'}</label>
+		    	<div class="controls">
+		      		<input type="text" name="achat.montant" id="achat.montant" value="${achat?.montant}" />
+		      		<span class="help-inline">${errors.forKey('achat.montant')}</span>
+		    	</div>
+		  	</div>
+		
+			<p>
+				<button type="submit" id="boutonModifier" class="btn btn-primary">&{'action.modifier'}</button>
+				<button type="button" id="boutonAnnuler" class="btn">&{'action.annuler'}</button>
+			</p>
+		#{/form}
+	</div>
+</div>

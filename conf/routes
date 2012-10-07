@@ -3,6 +3,8 @@ POST    /connexion          					Securite.authentifie
 GET     /deconnexion         					Securite.deconnexion
 GET     /achats                     			Achats.mesAchats
 GET		/achats/nouveau							Achats.nouveau
+GET		/achats/{id}							Achats.affiche
+PUT		/achats/{id}							Achats.modifie
 POST	/achats									Achats.ajoute
 DELETE	/achats/{id}							Achats.supprime
 GET		/amis									Amis.mesAmis

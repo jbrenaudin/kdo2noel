@@ -28,6 +28,7 @@
 		      		<td>${achat.pour}</td>
 		      		<td>${achat.cadeau}</td>
 		      		<td style="text-align:right;">${achat.montant ? achat.montant.enEuros() : ""}</td>
+		      		<td>#{a @Achats.affiche(achat.id)}Modifier#{/a}</td>
 		      		<td>#{a @Achats.supprime(achat.id)}Supprimer#{/a}</td>
 		    	</tr>
 	  		#{/list}
