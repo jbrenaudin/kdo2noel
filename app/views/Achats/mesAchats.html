@@ -9,6 +9,18 @@
 	$(function() {
 		activeMenu("Achats");
 	});
+	
+	var urlSupprimeAchat = #{jsAction @Achats.supprime(':id') /}
+	function supprimeAchat(id) {
+		$.ajax({
+			type: 'DELETE',
+			url: urlSupprimeAchat({id: id}),
+			dataType: "json",
+			success: function(data) {
+				location.reload();
+			}
+		});
+	}
 #{/set}
 
 <div class="span12">
@@ -20,6 +32,7 @@
 		      		<th style="text-align:left;">Surnom</th>
 		      		<th style="text-align:left;">Cadeau</th>
 		      		<th style="text-align:right;">Montant</th>
+		      		<th style="text-align:right;"></th>
 		    	</tr>
 		  	</thead>
 		  	<tbody>
@@ -28,17 +41,25 @@
 		      		<td>${achat.pour}</td>
 		      		<td>${achat.cadeau}</td>
 		      		<td style="text-align:right;">${achat.montant ? achat.montant.enEuros() : ""}</td>
-		      		<td>#{a @Achats.affiche(achat.id)}Modifier#{/a}</td>
-		      		<td>#{a @Achats.supprime(achat.id)}Supprimer#{/a}</td>
+		      		<td style="width:80px;text-align:right;">
+		      			<a href="@{Achats.affiche(achat.id)}" class="btn btn-micro" title="Modifier">
+							<i class="icon-edit"></i>
+						</a>
+		      			<a href="javascript:supprimeAchat(${achat.id});" class="btn btn-micro" title="Supprimer">
+		      				<i class="icon-remove"></i>
+		      			</a>
+					</td>
 		    	</tr>
 	  		#{/list}
 		  	</tbody>
 			<tfoot>
 		     	<tr>
-		     		<td>#{a @Achats.nouveau()}Ajouter un achat#{/a}</td>
-		     		
+		     		<td>
+		     			<a href="@{Achats.nouveau()}" class="btn btn-primary">&{'action.ajouter'}</a>
+		     		</td>
 		     		<td style="text-align:right;font-weight:bold;">Total</td>
 		     		<td style="text-align:right;font-weight:bold;">${utilisateur.montantTotalDesAchats.enEuros()}</td>
+		     		<td></td>
 		     	</tr>
 			</tfoot>
 		</table>

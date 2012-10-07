@@ -26,7 +26,6 @@ public class Achats extends Connecte {
 
 	public static void supprime(long id) {
 		utilisateurConecte().supprimeAchat(id).save();
-		mesAchats();
 	}
 
 	public static void affiche(long id) {
@@ -34,15 +33,15 @@ public class Achats extends Connecte {
 		render(achat);
 	}
 
-	public static void modifie(long id, @Valid Achat nouveau) {
+	public static void modifie(long id, @Valid Achat achat) {
 		if (hasErrors()) {
 			params.flash();
-			render("@affiche", nouveau);
+			render("@affiche", achat);
 		}
-		Achat achat = utilisateurConecte().recupereAchat(id);
-		achat.cadeau = nouveau.cadeau;
-		achat.pour = nouveau.pour;
-		achat.save();
+		Achat achatAModifier = utilisateurConecte().recupereAchat(id);
+		achatAModifier.cadeau = achat.cadeau;
+		achatAModifier.pour = achat.pour;
+		achatAModifier.save();
 		mesAchats();
 	}
 }
