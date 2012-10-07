@@ -8,21 +8,17 @@ import play.mvc.With;
 public class Invitations extends Connecte {
 
 	public static void envoiAUnUtilisateur(Long idDestinataire) {
-		Utilisateur emetteur = Connecte.utilisateur();
 		Utilisateur destinataire = Utilisateur.findById(idDestinataire);
-		Invitation invitation = new Invitation(emetteur, destinataire);
+		Invitation invitation = new Invitation(utilisateurConecte(), destinataire);
 		if (!invitation.validateAndCreate()) {
-			params.flash();
-			validation.keep();
+			flashParamsAndKeepValidation();
 		}
 		Amis.mesAmis();
 	}
 
 	public static void annuleUneInvitationEnvoyee(Long idDestinataire) {
-		Utilisateur emetteur = Connecte.utilisateur();
 		Utilisateur destinataire = Utilisateur.findById(idDestinataire);
-		Invitation invitation = Invitation.envoyeeParEtRecuePar(emetteur,
-				destinataire);
+		Invitation invitation = Invitation.envoyeeParEtRecuePar(utilisateurConecte(), destinataire);
 		if (invitation != null) {
 			invitation.delete();
 		}
@@ -30,9 +26,7 @@ public class Invitations extends Connecte {
 
 	public static void refuseUneInvitationRecue(Long idEmetteur) {
 		Utilisateur emetteur = Utilisateur.findById(idEmetteur);
-		Utilisateur destinataire = Connecte.utilisateur();
-		Invitation invitation = Invitation.envoyeeParEtRecuePar(emetteur,
-				destinataire);
+		Invitation invitation = Invitation.envoyeeParEtRecuePar(emetteur, utilisateurConecte());
 		if (invitation != null) {
 			invitation.delete();
 		}
@@ -40,13 +34,9 @@ public class Invitations extends Connecte {
 
 	public static void accepteUneInvitationRecue(Long idEmetteur) {
 		Utilisateur emetteur = Utilisateur.findById(idEmetteur);
-		Utilisateur destinataire = Connecte.utilisateur();
-		Invitation invitation = Invitation.envoyeeParEtRecuePar(emetteur,
-				destinataire);
+		Invitation invitation = Invitation.envoyeeParEtRecuePar(emetteur, utilisateurConecte());
 		if (invitation != null) {
-			invitation.accepte();
-			invitation.save();
-			invitation.delete();
+			invitation.accepte().delete();
 		}
 	}
 }

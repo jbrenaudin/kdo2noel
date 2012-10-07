@@ -1,8 +1,6 @@
 package controllers;
 
 import models.Achat;
-import models.Utilisateur;
-import play.cache.Cache;
 import play.data.validation.Valid;
 import play.mvc.With;
 
@@ -12,46 +10,39 @@ public class Achats extends Connecte {
 	public static void mesAchats() {
 		render();
 	}
-	
+
 	public static void nouveau() {
 		render();
 	}
-	
+
 	public static void ajoute(@Valid Achat achat) {
-		if (validation.hasErrors()) {
-			params.flash();
-			validation.keep();
+		if (hasErrors()) {
+			flashParamsAndKeepValidation();
 			nouveau();
 		}
-		Utilisateur moi = Connecte.utilisateur();
-		moi.ajouteAchat(achat);
-		moi.save();
+		utilisateurConecte().ajouteAchat(achat).save();
 		mesAchats();
 	}
-	
+
 	public static void supprime(long id) {
-		Utilisateur moi = Connecte.utilisateur();
-		moi.supprimeAchat(id);
-		moi.save();
+		utilisateurConecte().supprimeAchat(id).save();
 		mesAchats();
 	}
-	
+
 	public static void affiche(long id) {
-		Utilisateur moi = Connecte.utilisateur();
-		Achat achat = moi.recupereAchat(id);
+		Achat achat = utilisateurConecte().recupereAchat(id);
 		render(achat);
 	}
-	
-	public static void modifie(long id, @Valid Achat achat) {
-		if (validation.hasErrors()) {
+
+	public static void modifie(long id, @Valid Achat nouveau) {
+		if (hasErrors()) {
 			params.flash();
-			render("@affiche", achat);
+			render("@affiche", nouveau);
 		}
-		Utilisateur moi = Connecte.utilisateur();
-		Achat ancien = moi.recupereAchat(id);
-		ancien.cadeau = achat.cadeau;
-		ancien.pour = achat.pour;
-		ancien.save();
+		Achat achat = utilisateurConecte().recupereAchat(id);
+		achat.cadeau = nouveau.cadeau;
+		achat.pour = nouveau.pour;
+		achat.save();
 		mesAchats();
 	}
 }

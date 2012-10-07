@@ -2,19 +2,18 @@ package controllers;
 
 import models.Utilisateur;
 import play.mvc.Before;
-import play.mvc.Controller;
 
-public abstract class Connecte extends Controller {
+public abstract class Connecte extends Controleur {
 
 	@Before
 	static void ajouteUtilisateur() {
-		Utilisateur utilisateurConnecte = utilisateur();
+		Utilisateur utilisateurConnecte = utilisateurConecte();
 		if (utilisateurConnecte != null) {
 			renderArgs.put("utilisateur", utilisateurConnecte);
 		}
 	}
 
-	public static Utilisateur utilisateur() {
+	public static Utilisateur utilisateurConecte() {
 		Utilisateur utilisateur = getUtilisateurInRender();
 		if (utilisateur == null) {
 			utilisateur = getUtilisateurInEntrepot(session.get("email"));

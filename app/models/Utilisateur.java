@@ -47,12 +47,12 @@ public class Utilisateur extends Model {
 				.bind("utilisateurConnecte", this).fetch(10);
 	}
 
-	public void ajouteCadeau(String libelle) {
+	public Utilisateur ajouteCadeau(String libelle) {
 		libelle = libelle.trim();
 		if (!libelle.isEmpty()) {
-			Cadeau cadeau = new Cadeau(libelle);
-			cadeaux.add(cadeau);
+			cadeaux.add(new Cadeau(libelle));
 		}
+		return this;
 	}
 
 	public Cadeau supprimeCadeau(long id) {
@@ -95,10 +95,11 @@ public class Utilisateur extends Model {
 		return null;
 	}
 
-	public void changePositionAmi(Utilisateur ami, int position) {
+	public Utilisateur changePositionAmi(Utilisateur ami, int position) {
 		if (amis.remove(ami)) {
 			amis.add(position - 1, ami);
 		}
+		return this;
 	}
 
 	public List<Invitation> getInvitationsEnvoyees() {
@@ -113,12 +114,14 @@ public class Utilisateur extends Model {
 		return Invitation.nombreRecuesPar(this);
 	}
 
-	public void ajouteAchat(Achat achat) {
+	public Utilisateur ajouteAchat(Achat achat) {
 		achats.add(achat);
+		return this;
 	}
 
-	public void supprimeAchat(long id) {
+	public Utilisateur supprimeAchat(long id) {
 		achats.remove(recupereAchat(id));
+		return this;
 	}
 
 	public Achat recupereAchat(long id) {

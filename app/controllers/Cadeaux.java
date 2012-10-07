@@ -12,36 +12,28 @@ public class Cadeaux extends Connecte {
 	}
 
 	public static void ajoute(String libelle) {
-		Utilisateur utilisateur = Connecte.utilisateur();
-		utilisateur.ajouteCadeau(libelle);
-		utilisateur.save();
+		utilisateurConecte().ajouteCadeau(libelle).save();
 		maListe();
 	}
 
 	public static void supprime(long id) {
-		Utilisateur utilisateur = Connecte.utilisateur();
-		Cadeau cadeau = utilisateur.supprimeCadeau(id);
-		utilisateur.save();
+		Utilisateur moi = utilisateurConecte();
+		Cadeau cadeau = moi.supprimeCadeau(id);
+		moi.save();
 		renderJSON(cadeau);
 	}
 
 	public static void listeDUnAmi(long id) {
-		Utilisateur utilisateur = Connecte.utilisateur();
-		Utilisateur amiSelectionne = utilisateur.recupereAmi(id);
-		retourne403IfNull(amiSelectionne);
-		render(amiSelectionne);
+		Utilisateur moi = utilisateurConecte();
+		Utilisateur ami = moi.recupereAmi(id);
+		retourne403IfNull(ami);
+		render(ami);
 	}
 
 	public static void changePosition(long id, int position) {
-		Utilisateur utilisateur = Connecte.utilisateur();
-		Cadeau cadeau = utilisateur.recupereCadeauParId(id);
-		utilisateur.changePositionCadeau(cadeau, position);
-		utilisateur.save();
-	}
-
-	private static void retourne403IfNull(Object objet) {
-		if (objet == null) {
-			forbidden();
-		}
+		Utilisateur moi = utilisateurConecte();
+		Cadeau cadeau = moi.recupereCadeauParId(id);
+		moi.changePositionCadeau(cadeau, position);
+		moi.save();
 	}
 }
