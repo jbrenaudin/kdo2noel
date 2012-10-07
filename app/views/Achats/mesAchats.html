@@ -38,9 +38,9 @@
 		  	<tbody>
 	  		#{list utilisateur.achats, as:'achat'}
 		    	<tr>
-		      		<td>${achat.pour}</td>
-		      		<td>${achat.cadeau}</td>
-		      		<td style="text-align:right;">${achat.montant ? achat.montant.enEuros() : ""}</td>
+		      		<td style="vertical-align:middle;">${achat.pour}</td>
+		      		<td style="vertical-align:middle;">${achat.cadeau}</td>
+		      		<td style="text-align:right;vertical-align:middle;">${achat.montant ? achat.montant.enEuros() : ""}</td>
 		      		<td style="width:80px;text-align:right;">
 		      			<a href="@{Achats.affiche(achat.id)}" class="btn btn-micro" title="Modifier">
 							<i class="icon-edit"></i>
@@ -57,8 +57,8 @@
 		     		<td>
 		     			<a href="@{Achats.nouveau()}" class="btn btn-primary">&{'action.ajouter'}</a>
 		     		</td>
-		     		<td style="text-align:right;font-weight:bold;">Total</td>
-		     		<td style="text-align:right;font-weight:bold;">${utilisateur.montantTotalDesAchats.enEuros()}</td>
+		     		<td style="text-align:right;font-weight:bold;vertical-align:middle;">Total</td>
+		     		<td style="text-align:right;font-weight:bold;vertical-align:middle;">${utilisateur.montantTotalDesAchats.enEuros()}</td>
 		     		<td></td>
 		     	</tr>
 			</tfoot>
