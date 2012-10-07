@@ -21,3 +21,7 @@ validation.unique=Cet %s est déjà utilisé
 validation.required=Ce champ est obligatoire
 validation.email=Cet %s est invalide
 validation.equals=Doit être égale au %2$s
+
+achat.pour=Pour qui
+achat.cadeau=Cadeau
+achat.montant=Montant

@@ -86,7 +86,7 @@ public class Utilisateur extends Model {
 		return this;
 	}
 
-	public Utilisateur recupereAmiParId(long id) {
+	public Utilisateur recupereAmi(long id) {
 		for (Utilisateur ami : amis) {
 			if (ami.id == id) {
 				return ami;
@@ -113,20 +113,21 @@ public class Utilisateur extends Model {
 		return Invitation.nombreRecuesPar(this);
 	}
 
-	public List<Utilisateur> getAmisOublies() {
-		List<Utilisateur> amisOublies = new LinkedList<Utilisateur>(amis);
+	public void ajouteAchat(Achat achat) {
+		achats.add(achat);
+	}
+
+	public void supprimeAchat(long id) {
+		achats.remove(recupereAchat(id));
+	}
+
+	public Achat recupereAchat(long id) {
 		for (Achat achat : achats) {
-			amisOublies.remove(achat.ami);
+			if (achat.id.equals(id)) {
+				return achat;
+			}
 		}
-		return amisOublies;
-	}
-
-	public List<Achat> getMesAchats() {
-		return achats;
-	}
-
-	public void acheteCadeau(Utilisateur ami, Cadeau cadeau) {
-		achats.add(new Achat(ami, cadeau));
+		return null;
 	}
 
 	public float getMontantTotalDesAchats() {

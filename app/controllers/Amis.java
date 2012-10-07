@@ -29,17 +29,9 @@ public class Amis extends Connecte {
 	}
 
 	public static void changePosition(long id, int position) {
-		Utilisateur utilisateur = Connecte.utilisateur();
-		Utilisateur ami = utilisateur.recupereAmiParId(id);
-		utilisateur.changePositionAmi(ami, position);
-		utilisateur.save();
-	}
-
-	public static void acheteCadeau(long idAmi, long idCadeau) {
-		Utilisateur utilisateur = Connecte.utilisateur();
-		Utilisateur ami = utilisateur.recupereAmiParId(idAmi);
-		Cadeau cadeau = ami.recupereCadeauParId(idCadeau);
-		utilisateur.acheteCadeau(ami, cadeau);
-		utilisateur.save();
+		Utilisateur moi = Connecte.utilisateur();
+		Utilisateur ami = moi.recupereAmi(id);
+		moi.changePositionAmi(ami, position);
+		moi.save();
 	}
 }

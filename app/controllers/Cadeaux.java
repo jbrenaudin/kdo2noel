@@ -27,7 +27,7 @@ public class Cadeaux extends Connecte {
 
 	public static void listeDUnAmi(long id) {
 		Utilisateur utilisateur = Connecte.utilisateur();
-		Utilisateur amiSelectionne = utilisateur.recupereAmiParId(id);
+		Utilisateur amiSelectionne = utilisateur.recupereAmi(id);
 		retourne403IfNull(amiSelectionne);
 		render(amiSelectionne);
 	}

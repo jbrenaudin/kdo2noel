@@ -35,17 +35,6 @@
 	}
 #{/set}				
 
-#{ifErrors}	
-	<div class="row-fluid">
-		<div class="alert">
-			<button class="close" data-dismiss="alert">×</button>
-			#{errors}
-			    <li><strong>Erreur !!! </strong> ${error}.</li>
-			#{/errors}
-		</div>
-	</div>	
-#{/ifErrors}
-
 <div class="row-fluid">
 	#{doLayout /}
 </div>
