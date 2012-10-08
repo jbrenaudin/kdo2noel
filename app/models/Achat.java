@@ -2,6 +2,9 @@ package models;
 
 import javax.persistence.Entity;
 
+import common.CurrencyBinder;
+
+import play.data.binding.As;
 import play.data.validation.Required;
 import play.db.jpa.Model;
 
@@ -16,5 +19,6 @@ public class Achat extends Model {
 	@Required
 	public String cadeau;
 
+	@As(binder=CurrencyBinder.class)
 	public Float montant;
 }
