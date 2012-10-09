@@ -7,12 +7,12 @@
 #{set 'moreScripts'}
 	#{get 'moreScripts' /}
 	
-	var urlListeDAmisPossible = #{jsAction @Amis.possible(':surnom') /}
+	var urlListeDAmisPossibles = #{jsAction @Amis.possiblesAyant(':surnom') /}
 	$(function() {
 		activeMenu("Amis");
 		$("#rechercheAmi").autocomplete({
 			source: function( request, response ) {
-				$.get(urlListeDAmisPossible({surnom:request.term}), 
+				$.get(urlListeDAmisPossibles({surnom:request.term}), 
 				function( data ) {
 					response( $.map( data, function( item ) {
 						return { label: item.surnom, id: item.id }

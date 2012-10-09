@@ -13,9 +13,14 @@ public class Amis extends Connecte {
 		render();
 	}
 
-	public static void possible(String surnom) {
-		List<Utilisateur> amisPossibles = utilisateurConecte().chercheAmisPossibles(surnom);
+	public static void possiblesAyant(String surnom) {
+		List<Utilisateur> amisPossibles = utilisateurConecte().chercheAmisPossiblesAyant(surnom);
 		renderJSON(amisPossibles, new SerialiseurJsonDUtilisateur());
+	}
+	
+	public static void ayant(String surnom) {
+		List<Utilisateur> amis = utilisateurConecte().chercheAmisAyant(surnom);
+		renderJSON(amis, new SerialiseurJsonDUtilisateur());
 	}
 
 	public static void supprime(long id) {

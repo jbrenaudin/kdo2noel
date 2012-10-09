@@ -3,6 +3,7 @@ package models;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.annotation.Nullable;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,6 +13,10 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderColumn;
+
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 
 import play.data.validation.Email;
 import play.data.validation.Required;
@@ -35,7 +40,7 @@ public class Utilisateur extends Model {
 		return Utilisateur.find("byEmail", email.trim().toLowerCase()).first();
 	}
 
-	public List<Utilisateur> chercheAmisPossibles(String surnom) {
+	public List<Utilisateur> chercheAmisPossiblesAyant(String surnom) {
 		return Utilisateur
 				.find("FROM utilisateur u "
 						+ "WHERE LOWER(u.surnom) LIKE LOWER(:surnom) "
@@ -45,6 +50,15 @@ public class Utilisateur extends Model {
 						+ "AND u NOT IN (SELECT ami FROM utilisateur u2 INNER JOIN u2.amis ami WHERE u2 = :utilisateurConnecte) ")
 				.bind("surnom", "%" + surnom + "%")
 				.bind("utilisateurConnecte", this).fetch(10);
+	}
+
+	public List<Utilisateur> chercheAmisAyant(final String surnom) {
+		return Lists.newLinkedList(Iterables.filter(amis, new Predicate<Utilisateur>(){
+			@Override
+			public boolean apply(@Nullable Utilisateur utilisateur) {
+				return utilisateur.surnom.toLowerCase().contains(surnom.trim().toLowerCase());
+			}
+		}));
 	}
 
 	public Utilisateur ajouteCadeau(String libelle) {

@@ -6,11 +6,26 @@
 
 #{set 'moreScripts'}
 	#{get 'moreScripts' /}
+
+	var urlListeDAmis = #{jsAction @Amis.ayant(':surnom') /}
 	$(function() {
 		activeMenu("Achats");
 		
 		$('#boutonAnnuler').click(function() {
 			window.location = '@{Achats.mesAchats()}';
+		});
+		$("#achat\\.pour").autocomplete({
+			source: function( request, response ) {
+				$.get(urlListeDAmis({surnom:request.term}), 
+				function( data ) {
+					response( $.map( data, function( item ) {
+						return { label: item.surnom, id: item.id }
+					}));
+				}, "json");
+			},
+			select: function(event, ui) {
+				$("#achat\\.cadeau").focus();
+			}
 		});
 	});
 #{/set}
@@ -23,7 +38,7 @@
 				<div class="control-group ${field.error ? 'error' : ''}">
 			    	<label for="${field.name}" class="control-label obligatoire">&{field.name}</label>
 			    	<div class="controls">
-			      		<input type="text" name="${field.name}" id="${field.name}" value="${flash[field.name]}" autofocus="autofocus" />
+			      		<input type="text" id="${field.name}" name="${field.name}" value="${flash[field.name]}" autofocus="autofocus" />
 			      		<span class="help-inline">${field.error}</span>
 			    	</div>
 			  	</div>

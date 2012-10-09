@@ -9,7 +9,8 @@ POST	/achats									Achats.ajoute
 DELETE	/achats/{id}							Achats.supprime
 GET		/amis									Amis.mesAmis
 PUT		/amis									Amis.changePosition
-GET     /amis/possible/{surnom}                 Amis.possible
+GET     /amis/possible/{surnom}                 Amis.possiblesAyant
+GET		/amis/ayant/{surnom}					Amis.ayant
 DELETE  /amis/{id}                      		Amis.supprime
 POST  	/amis/{idAmi}/cadeau                    Amis.acheteCadeau
 GET     /amis/{id}/cadeaux                      Cadeaux.listeDUnAmi
