@@ -52,11 +52,11 @@ public class Utilisateur extends Model {
 				.bind("utilisateurConnecte", this).fetch(10);
 	}
 
-	public List<Utilisateur> chercheAmisAyant(final String surnom) {
+	public List<Utilisateur> chercheAmisAyant(final String critere) {
 		return Lists.newLinkedList(Iterables.filter(amis, new Predicate<Utilisateur>(){
 			@Override
 			public boolean apply(@Nullable Utilisateur utilisateur) {
-				return utilisateur.surnom.toLowerCase().contains(surnom.trim().toLowerCase());
+				return "*".equalsIgnoreCase(critere.trim()) || utilisateur.surnom.toLowerCase().contains(critere.trim().toLowerCase());
 			}
 		}));
 	}

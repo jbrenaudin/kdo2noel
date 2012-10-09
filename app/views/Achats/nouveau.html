@@ -14,6 +14,9 @@
 		$('#boutonAnnuler').click(function() {
 			window.location = '@{Achats.mesAchats()}';
 		});
+		$('#pour').click(function() {
+			$("#achat\\.pour").autocomplete( "search", "*");
+		});
 		$("#achat\\.pour").autocomplete({
 			source: function( request, response ) {
 				$.get(urlListeDAmis({surnom:request.term}), 
@@ -35,10 +38,18 @@
 		<h1>Ajout d'un achat</h1>
 		#{form @Achats.ajoute()}
 			#{field 'achat.pour'}
+			
+			
 				<div class="control-group ${field.error ? 'error' : ''}">
 			    	<label for="${field.name}" class="control-label obligatoire">&{field.name}</label>
 			    	<div class="controls">
-			      		<input type="text" id="${field.name}" name="${field.name}" value="${flash[field.name]}" autofocus="autofocus" />
+						<div class="input-append">
+						  	<input type="text" id="${field.name}" name="${field.name}" value="${flash[field.name]}" autofocus="autofocus" /><button id="pour" class="btn" type="button">
+						  		<i class="icon-chevron-down"></i>
+						  	</button>
+						</div>
+
+			      		
 			      		<span class="help-inline">${field.error}</span>
 			    	</div>
 			  	</div>
