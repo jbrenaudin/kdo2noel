@@ -11,7 +11,7 @@ public class CurrencyBinder implements TypeBinder<String> {
 	public Object bind(String name, Annotation[] anns, String value,
 			Class klass, Type type) throws Exception {
 		Float valeur = null;
-		if (value != null && !"".equals(value)) {
+		if (value != null && !value.isEmpty()) {
 			value = value.replaceAll(",", ".");
 			valeur = Float.parseFloat(value);
 		}
